@@ -7,8 +7,19 @@ import {
 import { Link } from "react-router-dom";
 import formatISO9075 from "date-fns/formatISO9075";
 
-const Note = ({ note }) => {
+const Note = ({ note, getNotes, customAlert }) => {
   const { _id, title, content, createdAt } = note;
+
+  const deleteNote = async () => {
+    const response = await fetch(`${import.meta.env.VITE_API}/delete/${_id}`, {
+      method: "delete",
+    });
+    if (response.status === 204) {
+      customAlert();
+      getNotes();
+    }
+  };
+
   return (
     <div className="w-2/5 border border-t-4 border-t-teal-600 mt-10 shadow-lg p-3 h-fit">
       <h3 className="text-xl font-medium">{title}</h3>
@@ -27,7 +38,11 @@ const Note = ({ note }) => {
               className="text-teal-600 cursor-pointer"
             />
           </Link>
-          <TrashIcon width={20} className="text-red-600 cursor-pointer" />
+          <TrashIcon
+            width={20}
+            className="text-red-600 cursor-pointer"
+            onClick={deleteNote}
+          />
         </div>
       </div>
     </div>
