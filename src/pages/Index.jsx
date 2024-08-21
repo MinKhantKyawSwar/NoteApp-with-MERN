@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Note from "../components/Note";
-import Plus from "../components/Plus";
 import { TailSpin } from "react-loader-spinner";
 
 import { Slide, ToastContainer, toast } from "react-toastify";
@@ -53,7 +52,7 @@ const Index = () => {
         transition={Slide}
       />
 
-      <section className="flex gap-6 px-10 flex-wrap">
+      <section className="flex gap-6 px-10 flex-wrap mx-auto w-full justify-center">
         {!loading && notes.length > 0 ? (
           <>
             {notes.map((note) => (
@@ -79,8 +78,6 @@ const Index = () => {
             />
           </div>
         )}
-
-        <Plus />
       </section>
     </>
   );
