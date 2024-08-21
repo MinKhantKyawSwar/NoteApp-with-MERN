@@ -14,6 +14,7 @@ const NoteForm = ({ isCreate }) => {
   const [redirect, setRedirect] = useState(false);
   const [oldNote, setOldNote] = useState({});
   const [previewImage, setPreviewImage] = useState(null);
+  const [isUpload, setIsUpload] = useState(false);
   const fileRef = useRef();
 
   const { id } = useParams();
@@ -71,6 +72,9 @@ const NoteForm = ({ isCreate }) => {
   const clearPreviewImage = (setFieldValue) => {
     setPreviewImage(null);
     setFieldValue("cover_image", null);
+    if (isCreate) {
+      fileRef.current.value = "";
+    }
   };
 
   const submitHandler = async (values) => {
@@ -142,7 +146,6 @@ const NoteForm = ({ isCreate }) => {
       </div>
       <Formik
         initialValues={initialValues}
-        // validate={validate}
         validationSchema={NoteFormSchema}
         onSubmit={submitHandler}
         enableReinitialize={true}
@@ -183,6 +186,7 @@ const NoteForm = ({ isCreate }) => {
                   Cover Image{" "}
                   <span className="text-xs font-medium"> (optional)</span>
                 </label>
+
                 {previewImage && (
                   <p
                     className="text-base font-medium text-teal-600 cursor-pointer"
@@ -193,33 +197,75 @@ const NoteForm = ({ isCreate }) => {
                     Clear
                   </p>
                 )}
-              </div>
-              <input
-                type="file"
-                name="cover_image"
-                hidden
-                ref={fileRef}
-                onChange={(e) => handleImageChange(e, setFieldValue)}
-              />
-              <div
-                className="border border-teal-600 flex items-center justify-center text-teal-600 border-dashed h-60 cursor-pointer rounded-lg relative overflow-hidden"
-                onClick={() => {
-                  fileRef.current.click();
-                }}
-              >
-                <ArrowUpTrayIcon
-                  width={40}
-                  height={40}
-                  className="z-20 font-bold"
-                />
-                {previewImage && (
-                  <img
-                    src={previewImage}
-                    alt={"preview"}
-                    className="w-full absolute top-0 left-0 h-full object-cover opacity-70 z-10"
-                  />
+                {isUpload ? (
+                  <>
+                    <p
+                      className="text-base font-medium text-teal-600 cursor-pointer"
+                      onClick={(_) => setIsUpload(false)}
+                    >
+                      Disable Cover Image
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p
+                      className="text-base font-medium text-teal-600 cursor-pointer"
+                      onClick={(_) => setIsUpload(true)}
+                    >
+                      Upload Cover Image
+                    </p>
+                  </>
                 )}
               </div>
+
+              {isUpload && (
+                <>
+                  <input
+                    type="file"
+                    name="cover_image"
+                    hidden
+                    ref={fileRef}
+                    onChange={(e) => handleImageChange(e, setFieldValue)}
+                  />
+                  <div
+                    className="border border-teal-600 flex items-center justify-center text-teal-600 border-dashed h-60 cursor-pointer rounded-lg relative overflow-hidden"
+                    onClick={() => {
+                      fileRef.current.click();
+                    }}
+                  >
+                    <ArrowUpTrayIcon
+                      width={40}
+                      height={40}
+                      className="z-20 font-bold"
+                    />
+                    {isCreate ? (
+                      <>
+                        {previewImage && (
+                          <img
+                            src={previewImage}
+                            alt={"preview"}
+                            className="w-full absolute top-0 left-0 h-full object-cover opacity-70 z-10"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={
+                            previewImage
+                              ? previewImage
+                              : `${import.meta.env.VITE_API}/${
+                                  oldNote.cover_image
+                                }`
+                          }
+                          alt={"preview"}
+                          className="w-full absolute top-0 left-0 h-full object-cover opacity-70 z-10"
+                        />
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
               <StyledErrorMessage name="cover_image" />
             </div>
             <button
@@ -236,6 +282,3 @@ const NoteForm = ({ isCreate }) => {
 };
 
 export default NoteForm;
-
-//44-2
-//55:06
