@@ -4,11 +4,13 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import StyledErrorMessage from "./StyledErrorMessage";
 import { useEffect, useRef, useState } from "react";
 
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+//formik custom error message
+import StyledErrorMessage from "./StyledErrorMessage";
 
 const NoteForm = ({ isCreate }) => {
   const [redirect, setRedirect] = useState(false);

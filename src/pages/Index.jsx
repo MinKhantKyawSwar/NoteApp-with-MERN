@@ -7,20 +7,39 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Index = () => {
   const [notes, setNotes] = useState([]);
-
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const getNotes = async () => {
+  const getNotes = async (pageNum) => {
     setLoading(true);
-    const response = await fetch(`${import.meta.env.VITE_API}/notes`);
-    const notes = await response.json();
+    const response = await fetch(
+      `${import.meta.env.VITE_API}/notes?page=${pageNum}`
+    );
+    const { notes, totalNotes, totalPages } = await response.json();
+    setTotalPages(totalPages);
     setNotes(notes);
     setLoading(false);
   };
 
-  useEffect((_) => {
-    getNotes();
-  }, []);
+  useEffect(
+    (_) => {
+      getNotes(currentPage);
+    },
+    [currentPage]
+  );
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   const customAlert = (message, status) => {
     toast.success("Note is deleted", {
@@ -63,6 +82,26 @@ const Index = () => {
                 customAlert={customAlert}
               />
             ))}
+            <div className="w-full flex items-center justify-center gap-3">
+              {currentPage > 1 && (
+                <button
+                  type="button"
+                  className="text-white font-medium bg-teal-600 px-3 py-1"
+                  onClick={handlePrev}
+                >
+                  Previous Page
+                </button>
+              )}
+              {currentPage < totalPages && (
+                <button
+                  type="button"
+                  className="text-white font-medium bg-teal-600 px-3 py-1"
+                  onClick={handleNext}
+                >
+                  Next Page
+                </button>
+              )}
+            </div>
           </>
         ) : (
           <div className="flex items-center justify-center align-center w-full">
