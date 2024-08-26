@@ -12,7 +12,7 @@ import { Navigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
 const AuthForm = ({ isLogin }) => {
-  const { setToken } = useContext(UserContext);
+  const { updateToken } = useContext(UserContext);
   const [redirect, setReirect] = useState(false);
   const initialValues = {
     username: "",
@@ -67,10 +67,11 @@ const AuthForm = ({ isLogin }) => {
     };
 
     const responseData = await response.json();
+
     if (response.status === 201) {
       setReirect(true);
     } else if (response.status === 200) {
-      setToken(responseData);
+      updateToken(responseData);
       setReirect(true);
     } else if (response.status === 400) {
       const pickedMessage = responseData.errorMessages[0].msg;

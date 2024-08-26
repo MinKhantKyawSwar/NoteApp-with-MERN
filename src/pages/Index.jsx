@@ -106,7 +106,7 @@ const Index = () => {
         ) : (
           <div className="flex items-center justify-center align-center w-full">
             <TailSpin
-              visible={true}
+              visible={loading}
               height="80"
               width="80"
               color="#4fa94d"
@@ -115,6 +115,9 @@ const Index = () => {
               wrapperStyle={{}}
               wrapperClass=""
             />
+            {!loading && notes.length === 0 && (
+              <p className="text-teal-600 text-xl mt-20">No Available Notes!</p>
+            )}
           </div>
         )}
       </section>

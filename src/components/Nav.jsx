@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
 const nav = () => {
-  const { token } = useContext(UserContext);
+  const { token, updateToken } = useContext(UserContext);
+
+  const logoutHandler = () => {
+    updateToken(null);
+  };
+
   return (
     <nav className="bg-slate-50 py-4 px-10 flex items-center justify-between font-mono">
       <Link to={"/"} className="text-teal-600 font-bold text-4xl">
@@ -17,6 +22,14 @@ const nav = () => {
               {" "}
               SHARE NOTE{" "}
             </Link>
+            <button
+              type="button"
+              className="text-teal-600 font-medium"
+              onClick={logoutHandler}
+            >
+              {" "}
+              LOGOUT{" "}
+            </button>
           </>
         ) : (
           <>
