@@ -5,9 +5,8 @@ const isLogin = async () => {
 
   if (!token) {
     return redirect("/");
-  } else {
-    console.log(token);
   }
+
   const response = await fetch(`${import.meta.env.VITE_API}/status`, {
     headers: {
       Authorization: `Bearer ${token.token}`,
@@ -15,6 +14,8 @@ const isLogin = async () => {
   });
 
   if (response.status === 401) {
+    localStorage.setItem("token", null);
+    window.location.reload(false);
     return redirect("/");
   } else {
     return null;

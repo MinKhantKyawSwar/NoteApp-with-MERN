@@ -14,6 +14,7 @@ import { UserContext } from "../contexts/UserContext";
 const AuthForm = ({ isLogin }) => {
   const { updateToken } = useContext(UserContext);
   const [redirect, setReirect] = useState(false);
+
   const initialValues = {
     username: "",
     email: "",
@@ -36,8 +37,6 @@ const AuthForm = ({ isLogin }) => {
   });
 
   const submitHandler = async (values) => {
-    console.log(values);
-
     const { email, password, username } = values;
     let END_POINT = `${import.meta.env.VITE_API}/register`;
 
@@ -80,7 +79,6 @@ const AuthForm = ({ isLogin }) => {
       toastFire(responseData.message);
     }
   };
-
   if (redirect) {
     return <Navigate to={isLogin ? "/" : "/login"} />;
   }
@@ -105,7 +103,7 @@ const AuthForm = ({ isLogin }) => {
         validationSchema={AuthFormSchema}
         onSubmit={submitHandler}
       >
-        {() => (
+        {({ isSubmitting }) => (
           <Form className="w-1/2 mx-auto">
             <h1 className="text-center font-semibold text-4xl my-4 text-teal-600">
               {isLogin ? "Login" : "Register"}
@@ -152,8 +150,11 @@ const AuthForm = ({ isLogin }) => {
             <button
               className="text-white bg-teal-600 py-4 font-medium w-full text-center"
               type="submit"
+              disabled={isSubmitting}
             >
-              {isLogin ? "Login" : "Register"}
+              {isLogin
+                ? `${isSubmitting ? "Submitting..." : "Login"}`
+                : `${isSubmitting ? "Registering..." : "Register"}`}
             </button>
           </Form>
         )}

@@ -12,6 +12,28 @@ const Note = ({ note, getNotes, customAlert }) => {
   const { token } = useContext(UserContext);
   const { _id, title, content, createdAt } = note;
 
+  const handleDeleteNote = async () => {
+    const localToken = JSON.parse(localStorage.getItem("token"));
+
+    if (!localToken) {
+      localStorage.setItem("token", null);
+      window.location.reload(false);
+    }
+
+    const response = await fetch(`${import.meta.env.VITE_API}/status`, {
+      headers: {
+        Authorization: `Bearer ${localToken.token}`,
+      },
+    });
+
+    if (response.status === 401) {
+      localStorage.setItem("token", null);
+      window.location.reload(false);
+    } else {
+      deleteNote();
+    }
+  };
+
   const deleteNote = async () => {
     const response = await fetch(`${import.meta.env.VITE_API}/delete/${_id}`, {
       method: "delete",
@@ -52,7 +74,7 @@ const Note = ({ note, getNotes, customAlert }) => {
                   <TrashIcon
                     width={20}
                     className="text-red-600 cursor-pointer"
-                    onClick={deleteNote}
+                    onClick={handleDeleteNote}
                   />
                 </>
               )}
