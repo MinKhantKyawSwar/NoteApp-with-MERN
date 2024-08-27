@@ -20,8 +20,10 @@ const Note = ({ note, getNotes, customAlert }) => {
       },
     });
     if (response.status === 204) {
-      customAlert();
+      customAlert("Post Deleted");
       getNotes();
+    } else {
+      customAlert("You are not authorized.", true);
     }
   };
 
@@ -37,17 +39,25 @@ const Note = ({ note, getNotes, customAlert }) => {
           <Link to={"/notes/" + _id}>
             <EyeIcon width={20} className="text-grey-500 cursor-pointer" />
           </Link>
-          <Link to={"/edit/" + _id}>
-            <PencilSquareIcon
-              width={20}
-              className="text-teal-600 cursor-pointer"
-            />
-          </Link>
-          <TrashIcon
-            width={20}
-            className="text-red-600 cursor-pointer"
-            onClick={deleteNote}
-          />
+          {token && (
+            <>
+              {note.author.toString() === token.userId && (
+                <>
+                  <Link to={"/edit/" + _id}>
+                    <PencilSquareIcon
+                      width={20}
+                      className="text-teal-600 cursor-pointer"
+                    />
+                  </Link>
+                  <TrashIcon
+                    width={20}
+                    className="text-red-600 cursor-pointer"
+                    onClick={deleteNote}
+                  />
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

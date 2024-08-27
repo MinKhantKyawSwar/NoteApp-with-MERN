@@ -64,7 +64,7 @@ const Details = () => {
                   <p className="flex items-center gap-1 font-sm text-gray-600">
                     <UserIcon className="w-4 h-4" />
                     {note.author.username}
-                  </p>
+                  </p >
                   <p className="flex items-center gap-1 font-sm text-gray-600">
                     <CalendarDaysIcon className="w-4 h-4" />
                     {formatISO9075(new Date(), {
